@@ -10,47 +10,53 @@ class Drone(Entity):
         self.speed = DRONE_SPEED
         self.target = self.random_target()
 
+        self.model = Entity(
+        parent=self,
+        model='assets/drone_body.glb',
+        scale=1
+        )
+
         # Body
-        self.body = Entity(
-            parent=self,
-            model='cube',
-            color=color_value,
-            scale=(1.5,0.3,1)
-        )
+        # self.body = Entity(
+        #     parent=self,
+        #     model='cube',
+        #     color=color_value,
+        #     scale=(1.5,0.3,1)
+        # )
 
-        # Arms
-        Entity(
-            parent=self,
-            model='cube',
-            color=color.black,
-            scale=(3,0.05,0.1)
-        )
+        # # Arms
+        # Entity(
+        #     parent=self,
+        #     model='cube',
+        #     color=color.black,
+        #     scale=(3,0.05,0.1)
+        # )
 
-        Entity(
-            parent=self,
-            model='cube',
-            color=color.black,
-            scale=(0.1,0.05,3)
-        )
+        # Entity(
+        #     parent=self,
+        #     model='cube',
+        #     color=color.black,
+        #     scale=(0.1,0.05,3)
+        # )
 
-        self.propellers=[]
+        # self.propellers=[]
 
-        prop_positions=[
-            (1.4,0.15,1.4),
-            (-1.4,0.15,1.4),
-            (1.4,0.15,-1.4),
-            (-1.4,0.15,-1.4)
-        ]
+        # prop_positions=[
+        #     (1.4,0.15,1.4),
+        #     (-1.4,0.15,1.4),
+        #     (1.4,0.15,-1.4),
+        #     (-1.4,0.15,-1.4)
+        # ]
 
-        for p in prop_positions:
-            prop=Entity(
-                parent=self,
-                model='cube',
-                color=color.red,
-                scale=(0.8,0.02,0.1),
-                position=p
-            )
-            self.propellers.append(prop)
+        # for p in prop_positions:
+        #     prop=Entity(
+        #         parent=self,
+        #         model='cube',
+        #         color=color.red,
+        #         scale=(0.8,0.02,0.1),
+        #         position=p
+        #     )
+        #     self.propellers.append(prop)
 
     def random_target(self):
         return Vec3(
@@ -99,5 +105,5 @@ class Drone(Entity):
 
         # Rotate propellers
 
-        for prop in self.propellers:
-            prop.rotation_y += ROTATION_SPEED*time.dt
+        # for prop in self.propellers:
+        #     prop.rotation_y += ROTATION_SPEED*time.dt
