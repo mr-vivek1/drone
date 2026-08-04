@@ -30,7 +30,7 @@ class Drone(Entity):
         for p in prop_positions:
              prop=Entity(
                  parent=self,
-                 model='assets/rotor_fl.glb',
+                 model='assets/propeller.glb',
                  scale=3,
                  position=p
              )
