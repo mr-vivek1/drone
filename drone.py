@@ -20,45 +20,29 @@ class Drone(Entity):
 
         # Body
         self.body = Entity(
-            parent=self,
-            model='cube',
-            color=color_value,
-            scale=(1.5, 0.3, 1)
+             parent=self,
+             model='assets/drone_body.glb',
+             scale=3
         )
 
-        # Arms
-        Entity(
-            parent=self,
-            model='cube',
-            color=color.black,
-            scale=(3, 0.05, 0.1)
-        )
 
-        Entity(
-            parent=self,
-            model='cube',
-            color=color.black,
-            scale=(0.1, 0.05, 3)
-        )
-
-        self.propellers = []
+        self.propellers=[]
 
         prop_positions = [
-            (1.4, 0.15, 1.4),
-            (-1.4, 0.15, 1.4),
-            (1.4, 0.15, -1.4),
-            (-1.4, 0.15, -1.4)
+        (0.76, 0.1, 1.18),
+        (-0.76, 0.1, 1.18),
+        (0.76, 0.1, -0.38),
+        (-0.76, 0.1, -0.38)
         ]
 
         for p in prop_positions:
-            prop = Entity(
-                parent=self,
-                model='cube',
-                color=color.red,
-                scale=(0.8, 0.02, 0.1),
-                position=p
-            )
-            self.propellers.append(prop)
+             prop=Entity(
+                 parent=self,
+                 model='assets/propeller.glb',
+                 scale=3,
+                 position=p
+             )
+             self.propellers.append(prop)
             
         # Visual debugging: Waypoint marker
         self.waypoint_marker = Entity(
