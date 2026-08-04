@@ -52,5 +52,9 @@ class DroneCamera:
 
         self.camera.rotation = (15, 0, 0)
 
+    def focus_on(self, entity):
+        if entity:
+            self.camera.position = entity.position
+
     def get_camera(self):
         return self.camera

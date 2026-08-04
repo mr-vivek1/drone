@@ -3,6 +3,7 @@ from ursina import *
 from world import World
 from swarm import Swarm
 from camera_controller import DroneCamera
+from ui_manager import UIManager
 
 # Create Ursina App
 app = Ursina()
@@ -14,36 +15,17 @@ window.fullscreen = False
 window.exit_button.visible = True
 window.fps_counter.enabled = True
 
+# Create Swarm
+swarm = Swarm()
+
 # Create World
-world = World()
+world = World(swarm.simulator.environment)
 
 # Create Camera
 camera_controller = DroneCamera()
 
-# Create Swarm
-swarm = Swarm()
-
-# Information Panel
-Text(
-    text="""
-Drone Swarm Simulator
-
-Controls
------------------------
-Right Mouse  : Rotate
-Middle Mouse : Pan
-Scroll Wheel : Zoom
-
-Press:
-1 - Default View
-2 - Top View
-3 - Side View
-4 - Front View
-""",
-    x=-0.87,
-    y=0.43,
-    background=True
-)
+# Create Operator Console UI
+ui_manager = UIManager(swarm, camera_controller)
 
 # Keyboard Controls
 def input(key):
@@ -59,10 +41,26 @@ def input(key):
 
     elif key == '4':
         camera_controller.front_view()
+        
+    elif key == 'p':
+        if swarm.simulator.is_paused:
+            swarm.simulator.resume()
+        else:
+            swarm.simulator.pause()
+            
+    elif key == 'o':
+        swarm.simulator.set_speed(0.5)
+    elif key == 'i':
+        swarm.simulator.set_speed(1.0)
+    elif key == 'u':
+        swarm.simulator.set_speed(2.0)
+    elif key == 'y':
+        swarm.simulator.set_speed(5.0)
 
 # Update Loop
 def update():
     swarm.update()
+    ui_manager.update()
 
 # Run Application
 app.run()

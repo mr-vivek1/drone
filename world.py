@@ -6,7 +6,8 @@ from config import *
 
 class World:
 
-    def __init__(self):
+    def __init__(self, environment):
+        self.environment = environment
 
         # Sky
         Sky()
@@ -27,63 +28,18 @@ class World:
             collider='box'
         )
 
-        # Boundary markers
-        self.create_boundaries()
+        self.create_from_environment()
 
-        # Simple buildings
-        self.create_buildings()
-
-    def create_boundaries(self):
-
-        thickness = 1
-        height = 8
-        size = WORLD_LIMIT * 2
-
-        Entity(
-            model='cube',
-            scale=(size,height,thickness),
-            position=(0,height/2,-WORLD_LIMIT),
-            color=color.gray
-        )
-
-        Entity(
-            model='cube',
-            scale=(size,height,thickness),
-            position=(0,height/2,WORLD_LIMIT),
-            color=color.gray
-        )
-
-        Entity(
-            model='cube',
-            scale=(thickness,height,size),
-            position=(-WORLD_LIMIT,height/2,0),
-            color=color.gray
-        )
-
-        Entity(
-            model='cube',
-            scale=(thickness,height,size),
-            position=(WORLD_LIMIT,height/2,0),
-            color=color.gray
-        )
-
-    def create_buildings(self):
-
-        positions = [
-            (-20,0,-15),
-            (15,0,-10),
-            (-10,0,18),
-            (18,0,20),
-            (0,0,0)
-        ]
-
-        for x,y,z in positions:
-
-            h = random.randint(4,10)
-
-            Entity(
-                model='cube',
-                position=(x,h/2,z),
-                scale=(4,h,4),
-                color=color.light_gray
-            )
+    def create_from_environment(self):
+        from navigation.obstacles import BoxObstacle
+        for obs in self.environment.obstacles:
+            if isinstance(obs, BoxObstacle):
+                # Ursina cube is centered at 0,0,0 with scale 1. 
+                # obs.size is total scale (width, height, depth)
+                # obs.center is world position
+                Entity(
+                    model='cube',
+                    position=obs.center,
+                    scale=obs.half_size * 2,
+                    color=color.gray if obs.half_size.x > 10 else color.light_gray
+                )
