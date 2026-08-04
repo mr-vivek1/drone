@@ -57,10 +57,11 @@ class Drone(Entity):
         self.id_label = Text(
             parent=self,
             text=self.sim_model.readable_id,
-            y=2,
-            scale=5,
+            y=1,
+            scale=10,
             billboard=True,
-            origin=(0,0)
+            origin=(0,0),
+            color = color.black
         )
         
         # Selection Highlight (Ring)

@@ -54,7 +54,7 @@ class UIManager:
         cur_y -= SPACING_LARGE * 1.5
         create_header(self.left_bg, "Spawn Drones", cur_y)
         cur_y -= SPACING_LARGE
-        self.spawn_input = InputField(parent=self.left_bg, default_value='10', y=cur_y, scale=(0.9, BUTTON_HEIGHT), text_color=COLOR_TEXT, color=color.white)
+        self.spawn_input = InputField(parent=self.left_bg, default_value='3', y=cur_y, scale=(0.9, BUTTON_HEIGHT), text_color=COLOR_TEXT, color=color.white)
         cur_y -= BUTTON_HEIGHT + SPACING_SMALL
         create_button(self.left_bg, 'Spawn', cur_y, self.spawn_drones, bg_color=color.white)
         
