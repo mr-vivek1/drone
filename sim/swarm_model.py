@@ -142,10 +142,13 @@ class SwarmModel:
     def assign_waypoint(self, drone_id):
         drone = self.get_drone(drone_id)
         if drone:
-            # Generate a random waypoint nearby for demonstration
-            wp_pos = Vec3(drone.position.x + random.uniform(-15, 15), 
-                          drone.position.y, 
-                          drone.position.z + random.uniform(-15, 15))
+            from config import WORLD_LIMIT
+            margin = 2.0  # safety buffer from the border
+            wx = drone.position.x + random.uniform(-15, 15)
+            wz = drone.position.z + random.uniform(-15, 15)
+            wx = max(-WORLD_LIMIT + margin, min(wx, WORLD_LIMIT - margin))
+            wz = max(-WORLD_LIMIT + margin, min(wz, WORLD_LIMIT - margin))
+            wp_pos = Vec3(wx, drone.position.y, wz)
             wp = Waypoint("rand_wp", position=wp_pos)
             mission = WaypointMission([wp])
             assignment = MissionAssignment(drone_id, mission)
@@ -156,9 +159,19 @@ class SwarmModel:
         drone = self.get_drone(drone_id)
         if drone:
             import math
-            # Generate a circular patrol path
+            from config import WORLD_LIMIT
             radius = 15.0
-            center = drone.position
+            margin = 2.0  # safety buffer so patrol circle doesn't hug the border
+            min_bound = -WORLD_LIMIT + radius + margin
+            max_bound = WORLD_LIMIT - radius - margin
+            # If world is too small for this radius, shrink radius to fit
+            if min_bound > max_bound:
+                radius = max(2.0, WORLD_LIMIT - margin)
+                min_bound = -WORLD_LIMIT + radius + margin
+                max_bound = WORLD_LIMIT - radius - margin
+            cx = max(min_bound, min(drone.position.x, max_bound))
+            cz = max(min_bound, min(drone.position.z, max_bound))
+            center = Vec3(cx, drone.position.y, cz)
             waypoints = []
             num_points = 4
             for i in range(num_points):
@@ -167,7 +180,6 @@ class SwarmModel:
                 wz = center.z + radius * math.sin(angle)
                 wp = Waypoint(f"patrol_{i}", position=Vec3(wx, center.y, wz))
                 waypoints.append(wp)
-                
             mission = PatrolMission(waypoints)
             assignment = MissionAssignment(drone_id, mission)
             self.mission_manager.assign_mission(drone_id, assignment)
